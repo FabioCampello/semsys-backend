@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!-- meta -->
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		<title th:remove="all"> Meeting Schedule Confirmation </title>
+		</head>
+	<body>
+	
+		<!-- info -->
+		<h2> A new meeting has been scheduled </h2>
+		<h3> Participants: </h3>
+		<p th:text="${schedule.employee.name}"></p>
+		<p th:text="${schedule.student.name}"></p>
+		<p><b> Meeting Date : </b><span th:text="${schedule.datetime}"></span></p>
+	
+	</body>
+</html>

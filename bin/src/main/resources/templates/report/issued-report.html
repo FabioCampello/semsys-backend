@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<!-- meta -->
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		<title th:remove="all"> Issued Report </title>
+		</head>
+	<body>
+	
+		<!-- info -->
+		<h1> A new report has been issued: </h1>
+		<p><b> Issuer : </b><span th:text="${report.schedule.employee.name}"></span></p>
+		<p><b> About : </b><span th:text="${report.schedule.student.name}"></span></p>
+		<hr/>
+		<h2 th:text="${report.title}"></h2>
+		<hr/>
+		<p th:text="${report.content}"></p>
+		<br>
+		<h5> Issued at <span th:text="${report.emission}"></span></h5>	
+	</body>
+</html>
