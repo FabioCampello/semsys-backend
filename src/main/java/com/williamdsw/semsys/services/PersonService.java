@@ -59,6 +59,23 @@ public class PersonService
 		return person.orElseThrow (() -> new ObjectNotFoundException (String.format ("Person not found for Id: %s", id))); 
 	}
 	
+	public Person findBySocialSecurityNumber (String socialSecurityNumber)
+	{
+		UserDetailsSS user = UserService.getAuthenticated ();
+		if (user == null || !user.hasRole (Profile.EMPLOYEE) && !user.hasRole (Profile.STUDENT))
+		{
+			throw new AuthorizationException ("Access Denied!");
+		}
+		
+		Person person = personRepository.findBySocialSecurityNumber (socialSecurityNumber);
+		if (person == null)
+		{
+			throw new ObjectNotFoundException (String.format ("Person not found for SSN: %s ", socialSecurityNumber));
+		}
+		
+		return person;
+	}
+	
 	@Transactional
 	public Person insert (Person person)
 	{

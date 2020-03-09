@@ -21,6 +21,8 @@ public class PersonDTO implements Serializable
 	@Email (message = "Invalid email")
 	protected String email;
 	
+	protected String type;
+	
 	// CONSTRUCTORS
 	
 	public PersonDTO () {}
@@ -30,6 +32,7 @@ public class PersonDTO implements Serializable
 		this.id = person.getId ();
 		this.name = person.getName ();
 		this.email = person.getEmail ();
+		this.type = person.getClass ().getSimpleName ();
 	}
 	
 	// GETTERS / SETTERS
@@ -62,5 +65,15 @@ public class PersonDTO implements Serializable
 	public void setEmail (String email) 
 	{
 		this.email = email;
+	}
+	
+	public String getType () 
+	{
+		return type;
+	}
+	
+	public void setType (String type) 
+	{
+		this.type = type;
 	}
 }

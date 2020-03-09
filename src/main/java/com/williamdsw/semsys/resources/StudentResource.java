@@ -46,6 +46,16 @@ public class StudentResource
 		return ResponseEntity.ok ().body (listDto);
 	}
 	
+	@ApiOperation (value = "Find all students by name", response = StudentDTO[].class)
+	@PreAuthorize ("hasRole('EMPLOYEE')")
+	@GetMapping (path = "/protected/students/name")
+	public ResponseEntity<List<StudentDTO>> findAllByName (@RequestParam (value = "name", defaultValue = "") String name)
+	{
+		List<Student> students = studentService.findAllByName (name);
+		List<StudentDTO> listDto = students.stream ().map (student -> new StudentDTO (student)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
+	}
+	
 	@ApiOperation (value = "Find all by name with pagination", response = StudentDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE')")
 	@GetMapping (path = "/protected/students/page")

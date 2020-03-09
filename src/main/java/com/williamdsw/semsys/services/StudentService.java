@@ -39,6 +39,12 @@ public class StudentService
 		return studentRepository.findAll();
 	}
 	
+	public List<Student> findAllByName (String name)
+	{
+		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);		
+		return studentRepository.findAllByNameContainingIgnoreCase (name);
+	}	
+	
 	public Page<Student> findByNamePage (String name, Integer page, Integer size, String direction, String orderBy)
 	{
 		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);

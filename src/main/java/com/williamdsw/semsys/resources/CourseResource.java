@@ -42,39 +42,25 @@ public class CourseResource
 		return ResponseEntity.ok ().body (listDto);
 	}
 	
-	@ApiOperation (value = "Find all courses by given period with pagination", response = CourseDTO[].class)
+	@ApiOperation (value = "Find all courses by given period", response = CourseDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE')")
 	@GetMapping (path = "/protected/courses/period")
-	public ResponseEntity<Page<CourseDTO>> findByPeriodPage 
-	(
-		@RequestParam (value = "value", defaultValue = "Morning") String description,
-		@RequestParam (value = "page", defaultValue = "0") Integer page,
-		@RequestParam (value = "size", defaultValue = "24") Integer size,
-		@RequestParam (value = "direction", defaultValue = "ASC") String direction,
-		@RequestParam (value = "orderBy", defaultValue = "name") String orderBy
-	)
+	public ResponseEntity<List<CourseDTO>> findByPeriod (@RequestParam (value = "value", defaultValue = "Morning") String description)
 	{
 		TimePeriod timePeriod = TimePeriod.toEnum (description);
-		Page<Course> courses = courseService.findByPeriod (timePeriod, page, size, direction, orderBy);
-		Page<CourseDTO> pageDto = courses.map (course -> new CourseDTO (course));
-		return ResponseEntity.ok ().body (pageDto);
+		List<Course> courses = courseService.findByPeriod (timePeriod);
+		List<CourseDTO> listDto = courses.stream ().map (course -> new CourseDTO (course)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
 	}
 	
-	@ApiOperation (value = "Find all courses by name with pagination", response = CourseDTO[].class)
+	@ApiOperation (value = "Find all courses by name", response = CourseDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE')")
 	@GetMapping (path = "/protected/courses/name")
-	public ResponseEntity<Page<CourseDTO>> findByNamePage 
-	(
-		@RequestParam (value = "name", defaultValue = "") String name,
-		@RequestParam (value = "page", defaultValue = "0") Integer page,
-		@RequestParam (value = "size", defaultValue = "24") Integer size,
-		@RequestParam (value = "direction", defaultValue = "ASC") String direction,
-		@RequestParam (value = "orderBy", defaultValue = "name") String orderBy
-	)
+	public ResponseEntity<List<CourseDTO>> findByName (@RequestParam (value = "name", defaultValue = "Morning") String name)
 	{
-		Page<Course> courses = courseService.findByName (name, page, size, direction, orderBy);
-		Page<CourseDTO> pageDto = courses.map (course -> new CourseDTO (course));
-		return ResponseEntity.ok ().body (pageDto);
+		List<Course> courses = courseService.findByName (name);
+		List<CourseDTO> listDto = courses.stream ().map (course -> new CourseDTO (course)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
 	}
 	
 	// ENDPOINTS -- SCHOOL CLASSES

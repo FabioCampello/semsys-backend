@@ -45,6 +45,17 @@ public class EmployeeResource
 		List<EmployeeDTO> listDto = employees.stream ().map (employee -> new EmployeeDTO (employee)).collect (Collectors.toList ());
 		return ResponseEntity.ok ().body (listDto);
 	}
+
+	
+	@ApiOperation (value = "Find all employees by name", response = EmployeeDTO[].class)
+	@PreAuthorize ("hasAnyRole('EMPLOYEE')")
+	@GetMapping (path = "/protected/employees/name")
+	public ResponseEntity<List<EmployeeDTO>> findAllByName (@RequestParam (value = "name", defaultValue = "") String name)
+	{
+		List<Employee> employees = employeeService.findAllByName (name);
+		List<EmployeeDTO> listDto = employees.stream ().map (employee -> new EmployeeDTO (employee)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
+	}
 	
 	@ApiOperation (value = "Find all employees by name with pagination", response = EmployeeDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE')")

@@ -3,6 +3,7 @@ package com.williamdsw.semsys.resources;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.williamdsw.semsys.domain.Employee;
 import com.williamdsw.semsys.domain.Person;
+import com.williamdsw.semsys.domain.Student;
 import com.williamdsw.semsys.domain.dto.PersonDTO;
 import com.williamdsw.semsys.services.PersonService;
 
@@ -48,6 +51,19 @@ public class PersonResource
 	{
 		Person person = personService.findById (id);
 		return ResponseEntity.ok ().body (person);
+	}
+	
+	@ApiOperation (value = "Find person by SSN", response = PersonDTO.class)
+	@PreAuthorize ("hasAnyRole('EMPLOYEE') or hasAnyRole('STUDENT')")
+	@GetMapping (path = "/protected/persons/ssn")
+	public ResponseEntity<PersonDTO> findBySSN (@RequestParam (value = "value") String ssn)
+	{
+		Person person = personService.findBySocialSecurityNumber (ssn);
+		System.out.println(person instanceof Employee);
+		System.out.println(person instanceof Student);
+		System.out.println(person.getClass().getSimpleName());
+		PersonDTO dto = new PersonDTO (person);
+		return ResponseEntity.ok ().body (dto);
 	}
 
 	@ApiOperation (value = "Delete a person by id")

@@ -1,5 +1,7 @@
 package com.williamdsw.semsys.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +12,9 @@ import com.williamdsw.semsys.domain.Person;
 @Repository
 public interface PersonRepository<T extends Person> extends JpaRepository<T, Integer>
 {
+	@Transactional (readOnly = true)
+	public List<T> findAllByNameContainingIgnoreCase (String name);
+	
 	@Transactional (readOnly = true)
 	public T findByEmail (String email);
 	

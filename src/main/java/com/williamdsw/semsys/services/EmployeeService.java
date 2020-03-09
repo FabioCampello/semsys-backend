@@ -42,6 +42,17 @@ public class EmployeeService
 		return employeeRepository.findAll ();
 	}
 	
+	public List<Employee> findAllByName (String name)
+	{
+		UserDetailsSS user = UserService.getAuthenticated ();
+		if (user == null | !user.hasRole (Profile.EMPLOYEE) && !user.hasRole (Profile.STUDENT))
+		{
+			throw new AuthorizationException ("Access Denied!");
+		}
+		
+		return employeeRepository.findAllByNameContainingIgnoreCase (name);
+	}
+	
 	public Page<Employee> findByNamePage (String name, Integer page, Integer size, String direction, String orderBy)
 	{
 		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
