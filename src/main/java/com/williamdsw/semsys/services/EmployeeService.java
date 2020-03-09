@@ -3,9 +3,6 @@ package com.williamdsw.semsys.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,13 +48,6 @@ public class EmployeeService
 		}
 		
 		return employeeRepository.findAllByNameContainingIgnoreCase (name);
-	}
-	
-	public Page<Employee> findByNamePage (String name, Integer page, Integer size, String direction, String orderBy)
-	{
-		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
-		PageRequest pageRequest = PageRequest.of (page, size, Direction.valueOf (direction), orderBy);
-		return employeeRepository.findByNameContainingIgnoreCase (name, pageRequest);
 	}
 	
 	public Employee findByEmail (String email)

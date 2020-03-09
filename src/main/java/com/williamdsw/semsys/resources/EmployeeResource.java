@@ -3,9 +3,10 @@ package com.williamdsw.semsys.resources;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.williamdsw.semsys.domain.Employee;
 import com.williamdsw.semsys.domain.dto.EmployeeDTO;
 import com.williamdsw.semsys.domain.dto.EmployeeNewDTO;
@@ -55,23 +57,6 @@ public class EmployeeResource
 		List<Employee> employees = employeeService.findAllByName (name);
 		List<EmployeeDTO> listDto = employees.stream ().map (employee -> new EmployeeDTO (employee)).collect (Collectors.toList ());
 		return ResponseEntity.ok ().body (listDto);
-	}
-	
-	@ApiOperation (value = "Find all employees by name with pagination", response = EmployeeDTO[].class)
-	@PreAuthorize ("hasRole('EMPLOYEE')")
-	@GetMapping (path = "/protected/employees/page")
-	public ResponseEntity<Page<EmployeeDTO>> findByNamePage 
-	(
-		@RequestParam (value = "name", defaultValue = "") String name, 
-		@RequestParam (value = "page", defaultValue = "0") Integer page, 
-		@RequestParam (value = "size", defaultValue = "24") Integer size, 
-		@RequestParam (value = "direction", defaultValue = "ASC") String direction, 
-		@RequestParam (value = "orderBy", defaultValue = "name") String orderBy
-	)
-	{
-		Page<Employee> employees = employeeService.findByNamePage (name, page, size, direction, orderBy);
-		Page<EmployeeDTO> pageDto = employees.map (employee -> new EmployeeDTO (employee));
-		return ResponseEntity.ok ().body (pageDto);
 	}
 	
 	@ApiOperation (value = "Find employee by email", response = EmployeeDTO.class)
