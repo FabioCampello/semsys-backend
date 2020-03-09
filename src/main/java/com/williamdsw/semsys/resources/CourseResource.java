@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.williamdsw.semsys.domain.Course;
 import com.williamdsw.semsys.domain.SchoolClass;
 import com.williamdsw.semsys.domain.dto.CourseDTO;
@@ -65,30 +65,17 @@ public class CourseResource
 	
 	// ENDPOINTS -- SCHOOL CLASSES
 	
-	@ApiOperation (value = "Find all classes by given course", response = SchoolClassDTO[].class)
-	@GetMapping (path = "/public/courses/{courseId}/classes")
-	public ResponseEntity<List<SchoolClassDTO>> findAllClassesByCourse (@PathVariable Integer courseId)
-	{
-		List<SchoolClass> classes = schoolClassService.findByCourse (courseId);
-		List<SchoolClassDTO> listDto = classes.stream ().map (schoolClass -> new SchoolClassDTO (schoolClass)).collect (Collectors.toList ());
-		return ResponseEntity.ok ().body (listDto);
-	}
-	
-	@ApiOperation (value = "Find all classes by given course with pagination", response = SchoolClassDTO[].class)
+	@ApiOperation (value = "Find all classes by given course and name", response = SchoolClassDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE')")
-	@GetMapping (path = "/protected/courses/{courseId}/classes/page")
-	public ResponseEntity<Page<SchoolClassDTO>> findAllClassesByCourseAndNamePage 
+	@GetMapping (path = "/protected/courses/{courseId}/classes")
+	public ResponseEntity<List<SchoolClassDTO>> findAllClassesByCourseAndNamePage 
 	(
 		@PathVariable Integer courseId,
-		@RequestParam (value = "name", defaultValue = "") String name,
-		@RequestParam (value = "page", defaultValue = "0") Integer page,
-		@RequestParam (value = "size", defaultValue = "24") Integer size,
-		@RequestParam (value = "direction", defaultValue = "ASC") String direction,
-		@RequestParam (value = "orderBy", defaultValue = "name") String orderBy
+		@RequestParam (value = "name", defaultValue = "") String name
 	)
 	{
-		Page<SchoolClass> classes = schoolClassService.findByCourseAndNamePage (courseId, name, page, size, direction, orderBy);
-		Page<SchoolClassDTO> pageDto = classes.map (schoolClass -> new SchoolClassDTO (schoolClass));
-		return ResponseEntity.ok ().body (pageDto);
+		List<SchoolClass> classes = schoolClassService.findByCourseAndName (courseId, name);
+		List<SchoolClassDTO> listDto = classes.stream ().map (schoolClass -> new SchoolClassDTO (schoolClass)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
 	}
 }
