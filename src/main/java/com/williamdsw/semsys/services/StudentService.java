@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +41,6 @@ public class StudentService
 		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);		
 		return studentRepository.findAllByNameContainingIgnoreCase (name);
 	}	
-	
-	public Page<Student> findByNamePage (String name, Integer page, Integer size, String direction, String orderBy)
-	{
-		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
-		PageRequest pageRequest = PageRequest.of (page, size, Direction.valueOf (direction), orderBy);
-		return studentRepository.findByNameContainingIgnoreCase (name, pageRequest);
-	}
 	
 	public Student findByEmail (String email)
 	{
