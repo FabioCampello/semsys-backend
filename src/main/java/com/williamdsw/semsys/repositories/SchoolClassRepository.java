@@ -12,5 +12,5 @@ import com.williamdsw.semsys.domain.SchoolClass;
 public interface SchoolClassRepository extends JpaRepository<SchoolClass, Integer>
 {
 	@Transactional (readOnly = true)
-	public List<SchoolClass> findByCourseIdAndNameContainingIgnoreCaseAsc (Integer courseId, String name);
+	public List<SchoolClass> findByCourseIdAndNameContainingIgnoreCase (Integer courseId, String name);
 }

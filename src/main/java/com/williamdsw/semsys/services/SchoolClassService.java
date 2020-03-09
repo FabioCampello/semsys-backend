@@ -24,6 +24,6 @@ public class SchoolClassService
 	{
 		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
 		courseService.findById (courseId);
-		return schoolClassRepository.findByCourseIdAndNameContainingIgnoreCaseAsc (courseId, name);
+		return schoolClassRepository.findByCourseIdAndNameContainingIgnoreCase (courseId, name);
 	}
 }

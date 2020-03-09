@@ -2,8 +2,6 @@ package com.williamdsw.semsys.repositories;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +17,8 @@ public interface MeetingScheduleRepository extends JpaRepository<MeetingSchedule
 	public List<MeetingSchedule> findByStatus (Integer status);
 	
 	@Transactional (readOnly = true)
-	public Page<MeetingSchedule> findAll (Pageable pageable);
+	public List<MeetingSchedule> findByEmployee (Employee employee);
 	
 	@Transactional (readOnly = true)
-	public Page<MeetingSchedule> findByEmployee (Employee employee, Pageable pageable);
-	
-	@Transactional (readOnly = true)
-	public Page<MeetingSchedule> findByStudent (Student student, Pageable pageable);
+	public List<MeetingSchedule> findByStudent (Student student);
 }

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +37,16 @@ public class MeetingScheduleResource
 	
 	// ENDPOINTS
 	
+	@ApiOperation (value = "Find all schedules", response = MeetingScheduleDTO[].class)
+	@PreAuthorize ("hasRole('EMPLOYEE')")
+	@GetMapping ()
+	public ResponseEntity<List<MeetingScheduleDTO>> findAll ()
+	{
+		List<MeetingSchedule> schedules = service.findAll ();
+		List<MeetingScheduleDTO> listDto = schedules.stream ().map (schedule -> new MeetingScheduleDTO (schedule)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
+	}
+	
 	@ApiOperation (value = "Find by id", response = MeetingScheduleDTO.class)
 	@PreAuthorize ("hasRole('STUDENT') or hasRole('EMPLOYEE')")
 	@GetMapping (path = "/{id}")
@@ -58,56 +67,26 @@ public class MeetingScheduleResource
 		return ResponseEntity.ok ().body (listDto);
 	}
 	
-	@ApiOperation (value = "Find all with pagination", response = MeetingScheduleDTO[].class)
-	@PreAuthorize ("hasRole('EMPLOYEE')")
-	@GetMapping (path = "/page")
-	public ResponseEntity<Page<MeetingScheduleDTO>> findPage 
-	(
-		@RequestParam (value = "page", defaultValue = "0") Integer page,
-		@RequestParam (value = "size", defaultValue = "24") Integer size,
-		@RequestParam (value = "direction", defaultValue = "ASC") String direction,
-		@RequestParam (value = "orderBy", defaultValue = "status") String orderBy
-	)
-	{
-		Page<MeetingSchedule> pageSchedule = service.findPage (page, size, direction, orderBy);
-		Page<MeetingScheduleDTO> pageDto = pageSchedule.map (schedule -> new MeetingScheduleDTO (schedule));
-		return ResponseEntity.ok ().body (pageDto);
-	}
-	
-	@ApiOperation (value = "Find all by employee with pagination", response = MeetingScheduleDTO[].class)
+	@ApiOperation (value = "Find all by employee", response = MeetingScheduleDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE')")
 	@GetMapping (path = "/employee/{employeeId}")
-	public ResponseEntity<Page<MeetingScheduleDTO>> findByEmployee 
-	(
-		@PathVariable Integer employeeId,
-		@RequestParam (value = "page", defaultValue = "0") Integer page,
-		@RequestParam (value = "size", defaultValue = "24") Integer size,
-		@RequestParam (value = "direction", defaultValue = "ASC") String direction,
-		@RequestParam (value = "orderBy", defaultValue = "status") String orderBy
-	)
+	public ResponseEntity<List<MeetingScheduleDTO>> findByEmployee (@PathVariable Integer employeeId)
 	{
-		Page<MeetingSchedule> pageSchedule = service.findByEmployee (employeeId, page, size, direction, orderBy);
-		Page<MeetingScheduleDTO> pageDto = pageSchedule.map (schedule -> new MeetingScheduleDTO (schedule));
-		return ResponseEntity.ok ().body (pageDto);
+		List<MeetingSchedule> schedules = service.findByEmployee (employeeId);
+		List<MeetingScheduleDTO> listDto = schedules.stream ().map (schedule -> new MeetingScheduleDTO (schedule)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
 	}
 	
-	@ApiOperation (value = "Find all by student with pagination", response = MeetingScheduleDTO[].class)
+	@ApiOperation (value = "Find all by student", response = MeetingScheduleDTO[].class)
 	@PreAuthorize ("hasRole('STUDENT') or hasRole('EMPLOYEE')")
 	@GetMapping (path = "/student/{studentId}")
-	public ResponseEntity<Page<MeetingScheduleDTO>> findByStudent 
-	(
-		@PathVariable Integer studentId,
-		@RequestParam (value = "page", defaultValue = "0") Integer page,
-		@RequestParam (value = "size", defaultValue = "24") Integer size,
-		@RequestParam (value = "direction", defaultValue = "ASC") String direction,
-		@RequestParam (value = "orderBy", defaultValue = "id") String orderBy
-	)
+	public ResponseEntity<List<MeetingScheduleDTO>> findByStudent (@PathVariable Integer studentId)
 	{
-		Page<MeetingSchedule> pageSchedule = service.findByStudent (studentId, page, size, direction, orderBy);
-		Page<MeetingScheduleDTO> pageDto = pageSchedule.map (schedule -> new MeetingScheduleDTO (schedule));
-		return ResponseEntity.ok ().body (pageDto);
+		List<MeetingSchedule> schedules = service.findByStudent (studentId);
+		List<MeetingScheduleDTO> listDto = schedules.stream ().map (schedule -> new MeetingScheduleDTO (schedule)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
 	}
-	
+
 	@ApiOperation (value = "Insert new meeting schedule")
 	@PreAuthorize ("hasRole('EMPLOYEE')")
 	@PostMapping

@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +36,12 @@ public class MeetingScheduleService
 	
 	// HELPER FUNCTIONS
 	
+	public List<MeetingSchedule> findAll ()
+	{
+		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
+		return scheduleRepository.findAll ();
+	}
+	
 	public MeetingSchedule findById (Integer id)
 	{
 		UserDetailsSS user = UserService.getAuthenticated ();
@@ -57,22 +60,14 @@ public class MeetingScheduleService
 		return scheduleRepository.findByStatus (status.getCode ());
 	}
 
-	public Page<MeetingSchedule> findPage (Integer page, Integer size, String direction, String orderBy)
-	{
-		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
-		PageRequest pageRequest = PageRequest.of (page, size, Direction.valueOf (direction), orderBy);
-		return scheduleRepository.findAll (pageRequest);
-	}
-
-	public Page<MeetingSchedule> findByEmployee (Integer employeeId, Integer page, Integer size, String direction, String orderBy)
+	public List<MeetingSchedule> findByEmployee (Integer employeeId)
 	{
 		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
 		Employee employee = (Employee) personService.findById (employeeId);
-		PageRequest pageRequest = PageRequest.of (page, size, Direction.valueOf (direction), orderBy);
-		return scheduleRepository.findByEmployee (employee, pageRequest);
+		return scheduleRepository.findByEmployee (employee);
 	}
 
-	public Page<MeetingSchedule> findByStudent (Integer studentId, Integer page, Integer size, String direction, String orderBy)
+	public List<MeetingSchedule> findByStudent (Integer studentId)
 	{
 		UserDetailsSS user = UserService.getAuthenticated ();
 		if (user == null || !user.hasRole (Profile.EMPLOYEE) && !user.hasRole (Profile.STUDENT) ||
@@ -82,8 +77,7 @@ public class MeetingScheduleService
 		}
 		
 		Student student = (Student) personService.findById (studentId);
-		PageRequest pageRequest = PageRequest.of (page, size, Direction.valueOf (direction), orderBy);
-		return scheduleRepository.findByStudent (student, pageRequest);
+		return scheduleRepository.findByStudent (student);
 	}
 	
 	@Transactional
