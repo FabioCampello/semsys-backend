@@ -1,12 +1,12 @@
 package com.williamdsw.semsys.services;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+
 import com.williamdsw.semsys.domain.Employee;
 import com.williamdsw.semsys.domain.MeetingSchedule;
 import com.williamdsw.semsys.domain.Report;
@@ -65,15 +65,14 @@ public class ReportService
 		return report;
 	}
 	
-	public Page<Report> findByEmployee (Integer employeeId, Integer page, Integer size, String direction, String orderBy)
+	public List<Report> findByEmployee (Integer employeeId)
 	{
 		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
 		Employee employee = (Employee) personService.findById (employeeId);
-		PageRequest pageRequest = PageRequest.of (page, size, Direction.valueOf (direction), orderBy);
-		return reportRepository.findByScheduleEmployee (employee, pageRequest);
+		return reportRepository.findByScheduleEmployee (employee);
 	}
 	
-	public Page<Report> findByStudent (Integer studentId, Integer page, Integer size, String direction, String orderBy)
+	public List<Report> findByStudent (Integer studentId)
 	{
 		UserDetailsSS user = UserService.getAuthenticated ();
 		if (user == null || !user.hasRole (Profile.EMPLOYEE) && !user.hasRole (Profile.STUDENT) ||
@@ -83,8 +82,7 @@ public class ReportService
 		}
 		
 		Student student = (Student) personService.findById (studentId);
-		PageRequest pageRequest = PageRequest.of (page, size, Direction.valueOf (direction), orderBy);
-		return reportRepository.findByScheduleStudent (student, pageRequest);
+		return reportRepository.findByScheduleStudent (student);
 	}
 	
 	public Report insert (Report report)

@@ -1,11 +1,12 @@
 package com.williamdsw.semsys.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -57,35 +57,21 @@ public class ReportResource
 	@ApiOperation (value = "List all by employee", response = ReportDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE')")
 	@GetMapping (path = "/employee/{id}")
-	public ResponseEntity<Page<ReportDTO>> findByEmployee 
-	(
-		@PathVariable Integer id,
-		@RequestParam (value = "page", defaultValue = "0") Integer page,
-		@RequestParam (value = "size", defaultValue = "24") Integer size,
-		@RequestParam (value = "direction", defaultValue = "DESC") String direction,
-		@RequestParam (value = "orderBy", defaultValue = "emission") String orderBy
-	)
+	public ResponseEntity<List<ReportDTO>> findByEmployee (@PathVariable Integer id)
 	{
-		Page<Report> pageReport = reportService.findByEmployee (id, page, size, direction, orderBy);
-		Page<ReportDTO> pageDto = pageReport.map (report -> new ReportDTO (report));
-		return ResponseEntity.ok ().body (pageDto);
+		List<Report> reports = reportService.findByEmployee (id);
+		List<ReportDTO> listDto = reports.stream ().map (report -> new ReportDTO (report)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
 	}
 	
 	@ApiOperation (value = "List all by student", response = ReportDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE') or hasRole ('STUDENT')")
 	@GetMapping (path = "/student/{id}")
-	public ResponseEntity<Page<ReportDTO>> findByStudent 
-	(
-		@PathVariable Integer id,
-		@RequestParam (value = "page", defaultValue = "0") Integer page,
-		@RequestParam (value = "size", defaultValue = "24") Integer size,
-		@RequestParam (value = "direction", defaultValue = "DESC") String direction,
-		@RequestParam (value = "orderBy", defaultValue = "emission") String orderBy
-	)
+	public ResponseEntity<List<ReportDTO>> findByStudent (@PathVariable Integer id)
 	{
-		Page<Report> pageReport = reportService.findByStudent (id, page, size, direction, orderBy);
-		Page<ReportDTO> pageDto = pageReport.map (report -> new ReportDTO (report));
-		return ResponseEntity.ok ().body (pageDto);
+		List<Report> reports = reportService.findByStudent (id);
+		List<ReportDTO> listDto = reports.stream ().map (report -> new ReportDTO (report)).collect (Collectors.toList ());
+		return ResponseEntity.ok ().body (listDto);
 	}
 	
 	@ApiOperation (value = "Insert new report")

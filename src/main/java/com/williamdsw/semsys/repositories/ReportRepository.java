@@ -1,7 +1,7 @@
 package com.williamdsw.semsys.repositories;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +18,8 @@ public interface ReportRepository extends JpaRepository<Report, Integer>
 	public Report findBySchedule (MeetingSchedule schedule);
 	
 	@Transactional (readOnly = true)
-	public Page<Report> findByScheduleEmployee (Employee employee, Pageable pageable);
+	public List<Report> findByScheduleEmployee (Employee employee);
 	
 	@Transactional (readOnly = true)
-	public Page<Report> findByScheduleStudent (Student student, Pageable pageable);
+	public List<Report> findByScheduleStudent (Student student);
 }
