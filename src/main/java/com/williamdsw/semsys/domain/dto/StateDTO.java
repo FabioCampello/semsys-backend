@@ -10,6 +10,7 @@ public class StateDTO implements Serializable
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
+	private String abbreviation;
 	
 	// CONSTRUCTORS
 	
@@ -19,6 +20,7 @@ public class StateDTO implements Serializable
 		super ();
 		this.id = state.getId ();
 		this.name = state.getName ();
+		this.abbreviation = state.getAbbreviation ();
 	}
 
 	// GETTERS / SETTERS
@@ -41,5 +43,15 @@ public class StateDTO implements Serializable
 	public void setName (String name) 
 	{
 		this.name = name;
+	}
+	
+	public String getAbbreviation () 
+	{
+		return abbreviation;
+	}
+	
+	public void setAbbreviation (String abbreviation) 
+	{
+		this.abbreviation = abbreviation;
 	}
 }

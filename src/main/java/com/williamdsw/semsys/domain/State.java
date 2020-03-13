@@ -22,6 +22,7 @@ public class State implements Serializable
 	@Id @GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
+	private String abbreviation;
 	
 	@JsonIgnore @ManyToOne @JoinColumn (name = "country_id")
 	private Country country;
@@ -32,12 +33,13 @@ public class State implements Serializable
 	// CONSTRUCTORS
 	
 	public State () {}
-	public State (Integer id, String name, Country country) 
+	public State (Integer id, String name, String abbreviation, Country country) 
 	{
 		super ();
 		this.id = id;
 		this.name = name;
 		this.country = country;
+		this.abbreviation = abbreviation;
 	}
 	
 	// GETTERS / SETTERS
@@ -60,6 +62,16 @@ public class State implements Serializable
 	public void setName (String name) 
 	{
 		this.name = name;
+	}
+	
+	public String getAbbreviation () 
+	{
+		return abbreviation;
+	}
+	
+	public void setAbbreviation (String abbreviation) 
+	{
+		this.abbreviation = abbreviation;
 	}
 	
 	public Country getCountry () 

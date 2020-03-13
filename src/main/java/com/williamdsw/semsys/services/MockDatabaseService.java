@@ -58,12 +58,12 @@ public class MockDatabaseService
 		SimpleDateFormat dateFormat = new SimpleDateFormat ("dd/MM/yyyy");
 				
 		// COUNTRY - STATE - CITY
-		Country unitedStatesOfAmerica = new Country (null, "United States of America");
+		Country unitedStatesOfAmerica = new Country (null, "United States of America", "US");
 		
-		State kansas = new State (null, "Kansas", unitedStatesOfAmerica);
-		State california = new State (null, "California", unitedStatesOfAmerica);
-		State nevada = new State (null, "Nevada", unitedStatesOfAmerica);
-		State newYork = new State (null, "New York", unitedStatesOfAmerica);
+		State kansas = new State (null, "Kansas", "KS", unitedStatesOfAmerica);
+		State california = new State (null, "California", "CA", unitedStatesOfAmerica);
+		State nevada = new State (null, "Nevada", "NV", unitedStatesOfAmerica);
+		State newYork = new State (null, "New York", "NY", unitedStatesOfAmerica);
 		
 		City wichita = new City (null, "Wichita", kansas);
 		City kansasCity = new City (null, "Kansas City", kansas);

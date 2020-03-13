@@ -10,6 +10,7 @@ public class CountryDTO implements Serializable
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
+	private String abbreviation;
 	
 	// CONSTRUCTORS
 	
@@ -19,6 +20,7 @@ public class CountryDTO implements Serializable
 		super ();
 		this.id = country.getId ();
 		this.name = country.getName ();
+		this.abbreviation = country.getAbbreviation ();
 	}
 
 	// GETTERS / SETTERS
@@ -41,5 +43,15 @@ public class CountryDTO implements Serializable
 	public void setName (String name) 
 	{
 		this.name = name;
+	}
+	
+	public String getAbbreviation () 
+	{
+		return abbreviation;
+	}
+	
+	public void setAbbreviation (String abbreviation) 
+	{
+		this.abbreviation = abbreviation;
 	}
 }

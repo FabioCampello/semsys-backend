@@ -20,6 +20,7 @@ public class Country implements Serializable
 	@Id @GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
+	private String abbreviation;
 	
 	@JsonIgnore @OneToMany (mappedBy = "country")
 	private List<State> states = new ArrayList<>();
@@ -27,11 +28,12 @@ public class Country implements Serializable
 	// CONSTRUCTORS
 	
 	public Country () {}
-	public Country (Integer id, String name) 
+	public Country (Integer id, String name, String abbreviation) 
 	{
 		super ();
 		this.id = id;
 		this.name = name;
+		this.abbreviation = abbreviation;
 	}
 	
 	// GETTERS / SETTERS
@@ -54,6 +56,16 @@ public class Country implements Serializable
 	public void setName (String name) 
 	{
 		this.name = name;
+	}
+	
+	public String getAbbreviation () 
+	{
+		return abbreviation;
+	}
+	
+	public void setAbbreviation (String abbreviation) 
+	{
+		this.abbreviation = abbreviation;
 	}
 	
 	public List<State> getStates () 
