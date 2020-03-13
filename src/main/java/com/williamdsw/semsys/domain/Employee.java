@@ -23,7 +23,11 @@ public class Employee extends Person
 	
 	// CONSTRUCTORS
 	
-	public Employee () {}
+	public Employee () 
+	{
+		this.addProfile (Profile.EMPLOYEE);
+	}
+	
 	public Employee (Integer id, String name, String email, String socialSecurityNumber, String password, Address address) 
 	{
 		super (id, name, email, socialSecurityNumber, password, address);

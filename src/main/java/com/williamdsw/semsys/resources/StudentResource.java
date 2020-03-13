@@ -84,6 +84,7 @@ public class StudentResource
 	{
 		Student student = studentService.fromDTO (dto);
 		student = (Student) personService.insert (student);
+		System.out.println(student.getProfiles());
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest ().path("/{id}").buildAndExpand (student.getId ()).toUri ();
 		return ResponseEntity.created (location).build ();		
 	}

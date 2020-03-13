@@ -66,9 +66,8 @@ public class CourseResource
 	// ENDPOINTS -- SCHOOL CLASSES
 	
 	@ApiOperation (value = "Find all classes by given course and name", response = SchoolClassDTO[].class)
-	@PreAuthorize ("hasRole('EMPLOYEE')")
-	@GetMapping (path = "/protected/courses/{courseId}/classes")
-	public ResponseEntity<List<SchoolClassDTO>> findAllClassesByCourseAndNamePage 
+	@GetMapping (path = "/public/courses/{courseId}/classes")
+	public ResponseEntity<List<SchoolClassDTO>> findAllClassesByCourseAndName 
 	(
 		@PathVariable Integer courseId,
 		@RequestParam (value = "name", defaultValue = "") String name

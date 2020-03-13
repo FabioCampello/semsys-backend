@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.williamdsw.semsys.domain.SchoolClass;
-import com.williamdsw.semsys.domain.enums.Profile;
 import com.williamdsw.semsys.repositories.SchoolClassRepository;
-import com.williamdsw.semsys.services.security.UserService;
 
 @Service
 public class SchoolClassService 
@@ -22,7 +20,6 @@ public class SchoolClassService
 	
 	public List<SchoolClass> findByCourseAndName (Integer courseId, String name)
 	{
-		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
 		courseService.findById (courseId);
 		return schoolClassRepository.findByCourseIdAndNameContainingIgnoreCase (courseId, name);
 	}

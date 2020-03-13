@@ -62,6 +62,7 @@ public class MeetingScheduleResource
 	@GetMapping (path = "/status")
 	public ResponseEntity<List<MeetingScheduleDTO>> findByStatus (@RequestParam (value = "value", defaultValue = "Finished") String description)
 	{
+		System.out.println(description);
 		List<MeetingSchedule> schedules = service.findByStatus (MeetingStatus.toEnum (description));
 		List<MeetingScheduleDTO> listDto = schedules.stream ().map (schedule -> new MeetingScheduleDTO (schedule)).collect (Collectors.toList ());
 		return ResponseEntity.ok ().body (listDto);

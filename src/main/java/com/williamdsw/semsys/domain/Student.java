@@ -30,7 +30,11 @@ public class Student extends Person
 	
 	// CONSTRUCTORS
 	
-	public Student () {}
+	public Student () 
+	{
+		this.addProfile (Profile.STUDENT);
+	}
+	
 	public Student (Integer id, String name, String email, String socialSecurityNumber, Date birthdate, String password, Address address, SchoolClass schoolClass) 
 	{
 		super (id, name, email, socialSecurityNumber, password, address);
