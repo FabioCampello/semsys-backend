@@ -98,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource ();
 		CorsConfiguration configuration = new CorsConfiguration ().applyPermitDefaultValues ();
 		configuration.setAllowedMethods (Arrays.asList ("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		configuration.setExposedHeaders (Arrays.asList ("Location"));
 		source.registerCorsConfiguration ("/**", configuration);
 		return source;
 	}

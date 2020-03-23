@@ -16,6 +16,8 @@ import com.williamdsw.semsys.domain.dto.StudentNewDTO;
 import com.williamdsw.semsys.domain.enums.Profile;
 import com.williamdsw.semsys.repositories.SchoolClassRepository;
 import com.williamdsw.semsys.repositories.StudentRepository;
+import com.williamdsw.semsys.security.UserDetailsSS;
+import com.williamdsw.semsys.services.exceptions.AuthorizationException;
 import com.williamdsw.semsys.services.exceptions.ObjectNotFoundException;
 import com.williamdsw.semsys.services.security.UserService;
 
@@ -57,7 +59,11 @@ public class StudentService
 	
 	public Student findBySocialSecurityNumber (String socialSecurityNumber)
 	{
-		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
+		UserDetailsSS user = UserService.getAuthenticated ();
+		if (user == null || !user.hasRole (Profile.EMPLOYEE) && !user.hasRole (Profile.STUDENT))
+		{
+			throw new AuthorizationException ("Access Denied");
+		}
 		
 		Student Student = studentRepository.findBySocialSecurityNumber (socialSecurityNumber);
 		if (Student == null)

@@ -14,6 +14,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.williamdsw.semsys.aws.AwsConstants;
 import com.williamdsw.semsys.services.exceptions.FileException;
 
+
+
 @Service
 public class S3Service 
 {
@@ -43,7 +45,7 @@ public class S3Service
 	public URI uploadFile (String fileName, InputStream inputStream, String contentType)
 	{
 		try 
-		{			
+		{
 			ObjectMetadata metadata = new ObjectMetadata ();
 			metadata.setContentType (contentType);
 			client.putObject (bucketName, fileName, inputStream, metadata);			

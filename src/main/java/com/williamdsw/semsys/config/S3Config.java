@@ -22,7 +22,7 @@ public class S3Config
 	// BEANS
 	
 	@Bean
-	public AmazonS3 buildAmazonS3 ()
+	public AmazonS3 amazonS3 ()
 	{
 		BasicAWSCredentials credentials = new BasicAWSCredentials (accessKeyId, secretAccessKey);
 		AWSStaticCredentialsProvider provider = new AWSStaticCredentialsProvider (credentials);

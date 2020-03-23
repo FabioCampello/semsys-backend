@@ -69,7 +69,7 @@ public class StudentResource
 	}
 	
 	@ApiOperation (value = "Find by SSN", response = StudentDTO.class)
-	@PreAuthorize ("hasRole('EMPLOYEE')")
+	@PreAuthorize ("hasRole('EMPLOYEE') or hasRole('STUDENT')")
 	@GetMapping (path = "/protected/students/ssn")
 	public ResponseEntity<StudentDTO> findBySSN (@RequestParam (value = "value") String ssn)
 	{

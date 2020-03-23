@@ -6,6 +6,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -19,6 +21,10 @@ import com.williamdsw.semsys.services.exceptions.FileException;
 @Service
 public class ImageService 
 {
+	// FIELDS
+	
+	private final List<String> EXTENSIONS = Arrays.asList ("png", "PNG", "jpg", "JPG", "jpeg", "JPEG");
+	
 	// HELPER FUNCTIONS
 	
 	// Creates new image from multipart
@@ -26,15 +32,15 @@ public class ImageService
 	{
 		// Check file's extension
 		String extension = FilenameUtils.getExtension (multipartFile.getOriginalFilename ());
-		if (!extension.equals ("png") && !extension.equals ("jpg"))
+		if (!EXTENSIONS.contains (extension))
 		{
 			throw new FileException ("Only PNG and JPG files are allowed");
 		}
-		
+
 		try 
 		{
 			BufferedImage image = ImageIO.read (multipartFile.getInputStream ());
-			if (extension.equals ("png"))
+			if (extension.equals ("png") || extension.equals ("PNG"))
 			{
 				image = convertPngToJpg (image);
 			}

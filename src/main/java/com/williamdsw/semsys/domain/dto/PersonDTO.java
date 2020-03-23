@@ -1,6 +1,9 @@
 package com.williamdsw.semsys.domain.dto;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
@@ -22,6 +25,7 @@ public class PersonDTO implements Serializable
 	protected String email;
 	
 	protected String type;
+	protected Set<String> profiles = new HashSet<>();
 	
 	// CONSTRUCTORS
 	
@@ -32,7 +36,10 @@ public class PersonDTO implements Serializable
 		this.id = person.getId ();
 		this.name = person.getName ();
 		this.email = person.getEmail ();
-		this.type = person.getClass ().getSimpleName ();
+		this.type = person.getClass ().getSimpleName ();		
+		person.getProfiles ().forEach (profile -> {
+			this.profiles.add (profile.toString());
+		});
 	}
 	
 	// GETTERS / SETTERS
@@ -75,5 +82,15 @@ public class PersonDTO implements Serializable
 	public void setType (String type) 
 	{
 		this.type = type;
+	}
+	
+	public Set<String> getProfiles () 
+	{
+		return profiles;
+	}
+	
+	public void setProfiles (Set<String> profiles) 
+	{
+		this.profiles = profiles;
 	}
 }

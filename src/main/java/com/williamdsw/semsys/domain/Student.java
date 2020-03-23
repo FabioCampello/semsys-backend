@@ -25,7 +25,7 @@ public class Student extends Person
 	@JsonIgnore @ManyToOne @JoinColumn (name = "class_id")
 	private SchoolClass schoolClass;
 	
-	@OneToMany (mappedBy = "student")
+	@JsonIgnore @OneToMany (mappedBy = "student")
 	private List<MeetingSchedule> schedules = new ArrayList<>();
 	
 	// CONSTRUCTORS
