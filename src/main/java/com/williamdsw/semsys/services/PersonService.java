@@ -76,6 +76,17 @@ public class PersonService
 		return person;
 	}
 	
+	public Person findByEmail (String email)
+	{
+		Person person = personRepository.findByEmail (email);
+		if (person == null) 
+		{
+			throw new ObjectNotFoundException (String.format ("Email %s not registered", email));
+		}
+		
+		return person;
+	}
+	
 	@Transactional
 	public Person insert (Person person)
 	{

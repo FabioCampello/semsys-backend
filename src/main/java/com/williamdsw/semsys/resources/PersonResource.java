@@ -60,6 +60,15 @@ public class PersonResource
 		PersonDTO dto = new PersonDTO (person);
 		return ResponseEntity.ok ().body (dto);
 	}
+	
+	@ApiOperation (value = "Find person by email", response = PersonDTO.class)
+	@GetMapping (path = "/public/persons/email")
+	public ResponseEntity<PersonDTO> findByEmail (@RequestParam (value = "value") String email)
+	{
+		Person person = personService.findByEmail (email);
+		PersonDTO dto = new PersonDTO (person);
+		return ResponseEntity.ok ().body (dto);
+	}
 
 	@ApiOperation (value = "Delete a person by id")
 	@PreAuthorize ("hasRole('ADMIN')")
