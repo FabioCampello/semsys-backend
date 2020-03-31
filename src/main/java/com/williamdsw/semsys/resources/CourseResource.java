@@ -56,7 +56,7 @@ public class CourseResource
 	@ApiOperation (value = "Find all courses by name", response = CourseDTO[].class)
 	@PreAuthorize ("hasRole('EMPLOYEE')")
 	@GetMapping (path = "/protected/courses/name")
-	public ResponseEntity<List<CourseDTO>> findByName (@RequestParam (value = "name", defaultValue = "Morning") String name)
+	public ResponseEntity<List<CourseDTO>> findByName (@RequestParam (value = "name", defaultValue = "") String name)
 	{
 		List<Course> courses = courseService.findByName (name);
 		List<CourseDTO> listDto = courses.stream ().map (course -> new CourseDTO (course)).collect (Collectors.toList ());
