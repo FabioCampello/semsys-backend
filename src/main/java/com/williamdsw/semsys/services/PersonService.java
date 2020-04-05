@@ -61,12 +61,6 @@ public class PersonService
 	
 	public Person findBySocialSecurityNumber (String socialSecurityNumber)
 	{
-		UserDetailsSS user = UserService.getAuthenticated ();
-		if (user == null || !user.hasRole (Profile.EMPLOYEE) && !user.hasRole (Profile.STUDENT))
-		{
-			throw new AuthorizationException ("Access Denied!");
-		}
-		
 		Person person = personRepository.findBySocialSecurityNumber (socialSecurityNumber);
 		if (person == null)
 		{

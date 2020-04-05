@@ -52,8 +52,7 @@ public class PersonResource
 	}
 	
 	@ApiOperation (value = "Find person by SSN", response = PersonDTO.class)
-	@PreAuthorize ("hasAnyRole('EMPLOYEE') or hasAnyRole('STUDENT')")
-	@GetMapping (path = "/protected/persons/ssn")
+	@GetMapping (path = "/public/persons/ssn")
 	public ResponseEntity<PersonDTO> findBySSN (@RequestParam (value = "value") String ssn)
 	{
 		Person person = personService.findBySocialSecurityNumber (ssn);
