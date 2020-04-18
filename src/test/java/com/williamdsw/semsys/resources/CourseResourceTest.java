@@ -8,12 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.williamdsw.semsys.domain.dto.CourseNewDTO;
 import com.williamdsw.semsys.resources.utils.HeaderUtils;
 
 @ExtendWith (SpringExtension.class)
@@ -27,8 +29,7 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 	private final String FIND_ALL_COURSES_URL = "/v1/public/courses/";
 	private final String FIND_ALL_COURSES_BY_PERIOD_PAGE_URL = "/v1/protected/courses/period";
 	private final String FIND_ALL_COURSES_BY_NAME_PAGE_URL = "/v1/protected/courses/name";
-	private final String FIND_ALL_CLASSES_BY_COURSE_URL = "/v1/public/courses/{courseId}/classes";
-	private final String FIND_ALL_CLASSES_BY_COURSE_AND_NAME_PAGE_URL = "/v1/protected/courses/{courseId}/classes/page";
+	private final String INSERT_URL = "/v1/admin/courses/";
 	
 	// TESTS
 	
@@ -47,8 +48,8 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 	@Test
 	public void findAllCoursesByPeriodWhenUserHasRoleEmployeeShouldReturnStatusCode200 ()
 	{
-		String[] names = { "value", "page", "size", "direction", "orderBy"};
-		String[] values = { "Afternoon", "0", "24", "ASC", "id"};
+		String[] names = { "value"};
+		String[] values = { "Afternoon"};
 		URI location = HeaderUtils.buildUriWithQueryParams (FIND_ALL_COURSES_BY_PERIOD_PAGE_URL, names, values);
 		
 		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getEmployeeEntity (), String.class);
@@ -59,8 +60,8 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 	@Test
 	public void findAllCoursesByPeriodWhenUserHasRoleStudentShouldReturnStatusCode403 ()
 	{
-		String[] names = { "value", "page", "size", "direction", "orderBy"};
-		String[] values = { "Afternoon", "0", "24", "ASC", "id"};
+		String[] names = { "value"};
+		String[] values = { "Afternoon"};
 		URI location = HeaderUtils.buildUriWithQueryParams (FIND_ALL_COURSES_BY_PERIOD_PAGE_URL, names, values);
 		
 		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getStudentEntity (), String.class);
@@ -71,8 +72,8 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 	@Test
 	public void findAllCoursesByPeriodWhenUserIsInvalidShouldReturnStatusCode403 ()
 	{
-		String[] names = { "value", "page", "size", "direction", "orderBy"};
-		String[] values = { "Afternoon", "0", "24", "ASC", "id"};
+		String[] names = { "value"};
+		String[] values = { "Afternoon"};
 		URI location = HeaderUtils.buildUriWithQueryParams (FIND_ALL_COURSES_BY_PERIOD_PAGE_URL, names, values);
 		
 		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getWrongEntity (), String.class);
@@ -83,8 +84,8 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 	@Test
 	public void findAllCoursesByPeriodWhenPeriodIsInvalidShouldReturnStatusCode400 ()
 	{
-		String[] names = { "value", "page", "size", "direction", "orderBy"};
-		String[] values = { "Night", "0", "24", "ASC", "id"};
+		String[] names = { "value"};
+		String[] values = { "Night"};
 		URI location = HeaderUtils.buildUriWithQueryParams (FIND_ALL_COURSES_BY_PERIOD_PAGE_URL, names, values);
 		
 		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getEmployeeEntity (), String.class);
@@ -97,8 +98,8 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 	@Test
 	public void findAllCoursesByNameWhenUserHasRoleEmployeeShouldReturnStatusCode200 ()
 	{
-		String[] names = { "name", "page", "size", "direction", "orderBy"};
-		String[] values = { "Inform", "0", "24", "ASC", "name"};
+		String[] names = { "name"};
+		String[] values = { "Inform"};
 		URI location = HeaderUtils.buildUriWithQueryParams (FIND_ALL_COURSES_BY_NAME_PAGE_URL, names, values);
 		
 		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getEmployeeEntity (), String.class);
@@ -109,8 +110,8 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 	@Test
 	public void findAllCoursesByNameWhenUserHasRoleStudentShouldReturnStatusCode403 ()
 	{
-		String[] names = { "name", "page", "size", "direction", "orderBy"};
-		String[] values = { "Inform", "0", "24", "ASC", "name"};
+		String[] names = { "name"};
+		String[] values = { "Inform"};
 		URI location = HeaderUtils.buildUriWithQueryParams (FIND_ALL_COURSES_BY_NAME_PAGE_URL, names, values);
 		
 		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getStudentEntity (), String.class);
@@ -121,8 +122,8 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 	@Test
 	public void findAllCoursesByNameWhenUserIsInvalidShouldReturnStatusCode403 ()
 	{
-		String[] names = { "name", "page", "size", "direction", "orderBy"};
-		String[] values = { "Inform", "0", "24", "ASC", "name"};
+		String[] names = { "name"};
+		String[] values = { "Inform"};
 		URI location = HeaderUtils.buildUriWithQueryParams (FIND_ALL_COURSES_BY_NAME_PAGE_URL, names, values);
 		
 		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getWrongEntity (), String.class);
@@ -130,96 +131,83 @@ public class CourseResourceTest extends GlobalResourceConfigureTest
 		System.out.println (response.getBody ());
 	}
 	
-	// --> FIND_ALL_CLASSES_BY_COURSE_URL = "/v1/public/courses/{courseId}/classes"
-
-	@Test
-	public void findAllClassesByCourseShouldReturnStatusCode200 ()
-	{
-		String[] headers = { "courseId" };
-		String[] values = { "1" };
-		URI location = HeaderUtils.buildUriWithPathParams (FIND_ALL_CLASSES_BY_COURSE_URL, headers, values);
-		
-		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, null, String.class);
-		Assertions.assertEquals (response.getStatusCodeValue (), HttpStatus.OK.value ());
-		System.out.println (response.getBody ());
-	}
-
-	@Test
-	public void findAllClassesByCourseWhenCourseIsInvalidShouldReturnStatusCode404 ()
-	{
-		String[] headers = { "courseId" };
-		String[] values = { "-1" };
-		URI location = HeaderUtils.buildUriWithPathParams (FIND_ALL_CLASSES_BY_COURSE_URL, headers, values);
-		
-		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, null, String.class);
-		Assertions.assertEquals (response.getStatusCodeValue (), HttpStatus.NOT_FOUND.value ());
-		System.out.println (response.getBody ());
-	}
+	
 
 	
-	// --> FIND_ALL_CLASSES_BY_COURSE_AND_NAME_PAGE_URL = "/v1/protected/courses/{courseId}/classes/page"
-
+	// --> INSERT_URL = "/v1/admin/courses/"
+	
 	@Test
-	public void findAllClassesByCourseAndNameWhenUserHasRoleEmployeeShouldReturnStatusCode200 ()
+	public void createCourseShouldPersistDataAndReturnStatusCode201 ()
 	{
-		String[] pathHeaders = { "courseId" };
-		String[] pathValues = { "1" };
-		URI location = HeaderUtils.buildUriWithPathParams (FIND_ALL_CLASSES_BY_COURSE_AND_NAME_PAGE_URL, pathHeaders, pathValues);
+		CourseNewDTO dto = new CourseNewDTO ();
+		dto.setId (null);
+		dto.setName ("Course Test");
+		dto.setPeriod("Afternoon");
+		dto.setType("Technical Course");
 		
-		String[] requestParamNames = { "name", "page", "size", "direction", "orderBy"};
-		String[] requestParamValues = { "Class", "0", "24", "ASC", "name"};
-		location = HeaderUtils.buildUriWithQueryParams (location.toString (), requestParamNames, requestParamValues);
-		
-		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getEmployeeEntity (), String.class);
-		Assertions.assertEquals (response.getStatusCodeValue (), HttpStatus.OK.value ());
-		System.out.println (response.getBody ());
-	}
-
-	@Test
-	public void findAllClassesByCourseAndNameWhenUserHasRoleStudentShouldReturnStatusCode403 ()
-	{
-		String[] pathHeaders = { "courseId" };
-		String[] pathValues = { "1" };
-		URI location = HeaderUtils.buildUriWithPathParams (FIND_ALL_CLASSES_BY_COURSE_AND_NAME_PAGE_URL, pathHeaders, pathValues);
-		
-		String[] requestParamNames = { "name", "page", "size", "direction", "orderBy"};
-		String[] requestParamValues = { "Class", "0", "24", "ASC", "name"};
-		location = HeaderUtils.buildUriWithQueryParams (location.toString (), requestParamNames, requestParamValues);
-		
-		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getStudentEntity (), String.class);
-		Assertions.assertEquals (response.getStatusCodeValue (), HttpStatus.FORBIDDEN.value ());
-		System.out.println (response.getBody ());
-	}
-
-	@Test
-	public void findAllClassesByCourseAndNameWhenUserIsInvalidShouldReturnStatusCode403 ()
-	{
-		String[] pathHeaders = { "courseId" };
-		String[] pathValues = { "1" };
-		URI location = HeaderUtils.buildUriWithPathParams (FIND_ALL_CLASSES_BY_COURSE_AND_NAME_PAGE_URL, pathHeaders, pathValues);
-		
-		String[] requestParamNames = { "name", "page", "size", "direction", "orderBy"};
-		String[] requestParamValues = { "Class", "0", "24", "ASC", "name"};
-		location = HeaderUtils.buildUriWithQueryParams (location.toString (), requestParamNames, requestParamValues);
-		
-		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getWrongEntity (), String.class);
-		Assertions.assertEquals (response.getStatusCodeValue (), HttpStatus.FORBIDDEN.value ());
-		System.out.println (response.getBody ());
+		HttpEntity<CourseNewDTO> entity = new HttpEntity<>(dto, this.getAdminEntity().getHeaders());
+		ResponseEntity<String> response = restTemplate.exchange(this.INSERT_URL, HttpMethod.POST, entity, String.class);
+		Assertions.assertEquals(response.getStatusCodeValue(), HttpStatus.CREATED.value());
+		System.out.println(response.getHeaders().getLocation());
 	}
 	
 	@Test
-	public void findAllClassesByCourseAndNameWhenCourseIsInvalidReturnStatusCode404 ()
+	public void createCourseWhenUserHasRoleEmployeeShouldReturnStatusCode403 ()
 	{
-		String[] pathHeaders = { "courseId" };
-		String[] pathValues = { "-1" };
-		URI location = HeaderUtils.buildUriWithPathParams (FIND_ALL_CLASSES_BY_COURSE_AND_NAME_PAGE_URL, pathHeaders, pathValues);
+		CourseNewDTO dto = new CourseNewDTO ();
+		dto.setId (null);
+		dto.setName ("Course Test");
+		dto.setPeriod("Afternoon");
+		dto.setType("Technical Course");
 		
-		String[] requestParamNames = { "name", "page", "size", "direction", "orderBy"};
-		String[] requestParamValues = { "Class", "0", "24", "ASC", "name"};
-		location = HeaderUtils.buildUriWithQueryParams (location.toString (), requestParamNames, requestParamValues);
+		HttpEntity<CourseNewDTO> entity = new HttpEntity<>(dto, this.getEmployeeEntity().getHeaders());
+		ResponseEntity<String> response = restTemplate.exchange(this.INSERT_URL, HttpMethod.POST, entity, String.class);
+		Assertions.assertEquals(response.getStatusCodeValue(), HttpStatus.FORBIDDEN.value());
+		System.out.println(response.getBody());
+	}
+	
+	@Test
+	public void createCourseWhenUserHasRoleStudentShouldReturnStatusCode403 ()
+	{
+		CourseNewDTO dto = new CourseNewDTO ();
+		dto.setId (null);
+		dto.setName ("Course Test");
+		dto.setPeriod("Afternoon");
+		dto.setType("Technical Course");
 		
-		ResponseEntity<String> response = restTemplate.exchange (location, HttpMethod.GET, this.getEmployeeEntity (), String.class);
-		Assertions.assertEquals (response.getStatusCodeValue (), HttpStatus.NOT_FOUND.value ());
-		System.out.println (response.getBody ());
+		HttpEntity<CourseNewDTO> entity = new HttpEntity<>(dto, this.getStudentEntity().getHeaders());
+		ResponseEntity<String> response = restTemplate.exchange(this.INSERT_URL, HttpMethod.POST, entity, String.class);
+		Assertions.assertEquals(response.getStatusCodeValue(), HttpStatus.FORBIDDEN.value());
+		System.out.println(response.getBody());
+	}
+	
+	@Test
+	public void createCourseWhenUserIsInvalidShouldReturnStatusCode403 ()
+	{
+		CourseNewDTO dto = new CourseNewDTO ();
+		dto.setId (null);
+		dto.setName ("Course Test");
+		dto.setPeriod ("Afternoon");
+		dto.setType ("Technical Course");
+		
+		HttpEntity<CourseNewDTO> entity = new HttpEntity<>(dto, this.getWrongEntity().getHeaders());
+		ResponseEntity<String> response = restTemplate.exchange(this.INSERT_URL, HttpMethod.POST, entity, String.class);
+		Assertions.assertEquals(response.getStatusCodeValue(), HttpStatus.FORBIDDEN.value());
+		System.out.println(response.getBody());
+	}
+	
+	@Test
+	public void createCourseWhenDataIsInvalidShouldReturnStatus422 ()
+	{
+		CourseNewDTO dto = new CourseNewDTO ();
+		dto.setId(null);
+		dto.setName(null);
+		dto.setPeriod(null);
+		dto.setType(null);
+		
+		HttpEntity<CourseNewDTO> entity = new HttpEntity<>(dto, this.getAdminEntity().getHeaders());
+		ResponseEntity<String> response = restTemplate.exchange(this.INSERT_URL, HttpMethod.POST, entity, String.class);
+		Assertions.assertEquals(response.getStatusCodeValue(), HttpStatus.UNPROCESSABLE_ENTITY.value());
+		System.out.println(response.getBody());
 	}
 }
