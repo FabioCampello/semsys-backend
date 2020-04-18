@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.williamdsw.semsys.domain.Course;
+import com.williamdsw.semsys.domain.dto.CourseNewDTO;
+import com.williamdsw.semsys.domain.enums.CourseType;
 import com.williamdsw.semsys.domain.enums.Profile;
 import com.williamdsw.semsys.domain.enums.TimePeriod;
 import com.williamdsw.semsys.repositories.CourseRepository;
@@ -43,5 +46,25 @@ public class CourseService
 	{
 		UserService.checkAuthenticatedUser (Profile.EMPLOYEE);
 		return repository.findByNameContainingIgnoreCase (name);
+	}
+	
+	@Transactional
+	public Course insert (Course course) 
+	{
+		UserService.checkAuthenticatedUser (Profile.ADMIN);
+		course.setId (null);
+		course = repository.save (course);
+		return course;
+	}
+
+	public Course fromDTO (CourseNewDTO dto) 
+	{
+		Course course = new Course ();
+		course.setId (dto.getId ());
+		course.setName (dto.getName ());
+		course.setPeriod (TimePeriod.toEnum (dto.getPeriod ()));
+		course.setType (CourseType.toEnum (dto.getType ()));
+
+		return course;
 	}
 }
