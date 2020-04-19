@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.williamdsw.semsys.domain.Employee;
 import com.williamdsw.semsys.domain.Person;
 import com.williamdsw.semsys.repositories.PersonRepository;
-import com.williamdsw.semsys.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class AuthService 
@@ -27,16 +27,21 @@ public class AuthService
 	
 	public void sendNewPassword (String email)
 	{
-		// Checks email
-		Person person = personRepository.findByEmail (email);
-		if (person == null)
-		{
-			throw new ObjectNotFoundException ("Email not found");
-		}
-		
 		String newPassword = generateNewPassword ();
-		person.setPassword (passwordEncoder.encode (newPassword));
-		personRepository.save (person);
+
+		// Checks person
+		Person person = personRepository.findByEmail (email);
+		if (person != null)
+		{
+			person.setPassword (passwordEncoder.encode (newPassword));
+			personRepository.save (person);
+		}
+		else 
+		{
+			person = new Employee();
+			person.setEmail(email);
+		}
+
 		emailService.sendNewPasswordEmail (person, newPassword);
 	}
 	
