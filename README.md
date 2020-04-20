@@ -1,5 +1,13 @@
 # Semsys Backend
 
+## Live Demo
+
+https://semsys-b3e13.web.app/login
+
+## About
+
+SEMSYS is a management software for schools and educational entities. It is possible to register employees, students, courses and classes. It was developed to schedule meetings between employee and student with the purpose of discussing personal or school problems. It is also possible to issue reports on these meetings.
+
 ## Built With
 
 * 	[Spring Tools 4](https://maven.apache.org/) - Eclipse-based development environment that is customized for developing Spring applications.
