@@ -9,7 +9,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,5 +76,14 @@ public class CourseResource
 		course = courseService.insert (course);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest ().path ("/{id}").buildAndExpand (course.getId ()).toUri ();
 		return ResponseEntity.created (location).build ();
+	}
+	
+	@ApiOperation (value = "Delete course by id and and its respective classes")
+	@PreAuthorize ("hasRole('ADMIN')")
+	@DeleteMapping (path = "/admin/courses/{id}")
+	public ResponseEntity<Void> delete (@PathVariable Integer id)
+	{
+		courseService.deleteById (id);
+		return ResponseEntity.noContent ().build ();
 	}
 }

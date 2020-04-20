@@ -24,6 +24,12 @@ public class SchoolClassService
 	
 	// HELPER FUNCTIONS
 	
+	public List<SchoolClass> findByCourse (Integer courseId)
+	{
+		courseService.findById (courseId);
+		return schoolClassRepository.findByCourseId (courseId);
+	}
+	
 	public List<SchoolClass> findByCourseAndName (Integer courseId, String name)
 	{
 		courseService.findById (courseId);
@@ -38,6 +44,12 @@ public class SchoolClassService
 		courseRepository.save (schoolClass.getCourse ());
 		
 		return schoolClass;
+	}
+	
+	public void deleteAllInList (List<SchoolClass> schoolClasses)
+	{
+		UserService.checkAuthenticatedUser (Profile.ADMIN);
+		schoolClassRepository.deleteAll(schoolClasses);
 	}
 	
 	public SchoolClass fromDTO (SchoolClassNewDTO dto)

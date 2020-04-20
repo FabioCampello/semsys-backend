@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.williamdsw.semsys.domain.Course;
+import com.williamdsw.semsys.domain.SchoolClass;
 import com.williamdsw.semsys.domain.dto.CourseNewDTO;
 import com.williamdsw.semsys.domain.enums.CourseType;
 import com.williamdsw.semsys.domain.enums.Profile;
@@ -22,6 +23,7 @@ public class CourseService
 	// FIELDS
 	
 	@Autowired private CourseRepository repository;
+	@Autowired private SchoolClassService schoolClassService;
 	
 	// HELPER FUNCTIONS
 	
@@ -55,6 +57,21 @@ public class CourseService
 		course.setId (null);
 		course = repository.save (course);
 		return course;
+	}
+	
+	public void deleteById (Integer id)
+	{
+		UserService.checkAuthenticatedUser (Profile.ADMIN);
+		findById (id);
+		
+		// School Classes
+		List<SchoolClass> schoolClasses = schoolClassService.findByCourse (id);
+		if (schoolClasses.size() >= 1)
+		{
+			schoolClassService.deleteAllInList (schoolClasses);
+		}
+
+		repository.deleteById (id);
 	}
 
 	public Course fromDTO (CourseNewDTO dto) 
